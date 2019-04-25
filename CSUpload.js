@@ -17,7 +17,7 @@ class CSUpload {
 		for (let [key, value] of Object.entries(options)) {
 			this.options[key] = value;
 		}
-		this.checkChunkSize();
+		
 		if(!this.options.url) {
 			throw new Error("Enter Url");
 		}
@@ -25,11 +25,6 @@ class CSUpload {
 		this.prepareSenders();
 	}
 
-	checkChunkSize(){
-		if (this.options.chunkSize % 6 !== 0) {
-			this.options.chunkSize += 6 - this.options.chunkSize % 6;
-		}
-	}
 
 	prepareSenders(){
 		for (let i = 0; i < this.numberOfSenders; i++){
@@ -38,10 +33,18 @@ class CSUpload {
 		}
 	}
 
-	upload(file){
-		let singleFile = new SingleFile(file, this.options, this);
-		this.singleFiles.push(singleFile);
-		return singleFile;
+	upload(file, replaceUrl){
+		if(replaceUrl){
+			let newOptions = JSON.parse(JSON.stringify(this.options));
+			newOptions.url = replaceUrl;
+			let singleFile = new SingleFile(file, newOptions, this);
+			this.singleFiles.push(singleFile);
+			return singleFile;
+		} else {
+			let singleFile = new SingleFile(file, this.options, this);
+			this.singleFiles.push(singleFile);
+			return singleFile;
+		}
 	}
 
 	startSenders(){

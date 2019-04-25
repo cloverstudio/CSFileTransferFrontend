@@ -37,8 +37,9 @@ class Sender{
 		fd.append('chunkNumber', chunk.chunkNumber);
 		fd.append('fileType', chunk.fileType);
     fd.append('numberOfChunks', chunk.numberOfChunks); 
+    fd.append('size', chunk.size); 
 
-    fetch(this.csupload.options.url, {
+    fetch(singleFile.url, {
       method: 'POST',
       body: fd,
       signal
@@ -52,13 +53,17 @@ class Sender{
         const percentage = (singleFile.chunksSent / chunk.numberOfChunks * 100);
         singleFile.eventEmitter.trigger('progress', percentage);
 
+        if(percentage === 100){
+          singleFile.isFinished = true;
+        }
+
         this.isStarted = false;
         this.csupload.startSenders();
 
       })
       .catch((e) => {
         if(this.isAborted){
-          //console.log("aborted from sender", this.id,"chunk:", chunk.chunkNumber)
+          console.log("aborted from sender", this.id,"chunk:", chunk.chunkNumber)
           singleFile.chunksList.push(chunk);
           this.isAborted = false;
         } else {

@@ -5,7 +5,7 @@ const handleFiles = function (files) {
   cSUpload.config({
     'chunkSize': 1024 * 1024 * 1,
     'concurrentRequests': 3,
-    'url': 'http://54.153.78.182:80/upload',
+    'url': 'http://localhost:3000/upload',
     'repeat': true
   });
 
@@ -13,7 +13,7 @@ const handleFiles = function (files) {
     
   for (let i = 0; i < files.length; i++){
     
-    let singleFile = cSUpload.upload(files[i]);
+    let singleFile = cSUpload.upload(files[i], "http://192.168.1.16:3000/upload");
     
     let paragraph = getNewELement("p");
     paragraph.innerText = singleFile.file.name;

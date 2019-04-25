@@ -11,6 +11,7 @@ class SingleFile{
     this.CSUpload = CSUpload;
     this.isPaused = false;
     this.repeatCounter = 5;
+    this.isFinished = false;
   }
 
   createChunkList(){
@@ -26,6 +27,7 @@ class SingleFile{
       const numberOfChunks = this.NumberOfChunks;
       const chunkNumber = this.chunksList.length + 1;
       const fileType = this.file.type;
+      const size = this.chunkSize;
       this.chunksList.push(
       {
         startByte,
@@ -33,7 +35,8 @@ class SingleFile{
         fileName,
         numberOfChunks,
         chunkNumber,
-        fileType
+        fileType,
+        size
       });
       startByte = endByte;
     }
@@ -55,13 +58,14 @@ class SingleFile{
   }
 
   async getSentChunks(){
-    
-    await fetch(`${this.url}?fileName=${this.file.name}&numberOfChunks=${this.NumberOfChunks}`, {method:"GET"})
+    console.log(this.chunkSize);
+    await fetch(`${this.url}?fileName=${this.file.name}&numberOfChunks=${this.NumberOfChunks}&size=${this.chunkSize}`, {method:"GET"})
         .then((response) => response.json())
         .then((response) =>  {
           this.chunksUploaded = response;
           this.chunksSent = this.chunksUploaded.length;
           this.CSUpload.startSenders();
+          console.log(response);
         })
         .catch( (e) => {
           if(this.CSUpload.options.repeat){
@@ -95,9 +99,11 @@ class SingleFile{
   }
 
   async continue(){
-    this.createChunkList();
-    this.isPaused = false;
-    this.getSentChunks();
+    if(!this.isFinished){
+      this.createChunkList();
+      this.isPaused = false;
+      this.getSentChunks();
+    }
   }
   
 }
