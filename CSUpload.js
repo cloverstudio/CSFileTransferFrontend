@@ -1,77 +1,89 @@
-class CSUpload {
-	constructor() {
-		this.singleFiles = [];
-		this.senders = [];
-		this.createDefaultOptions();
-	}
+var CSUpload = (function() {
 
-	createDefaultOptions(){
-		this.options = {
+	var createDefaultOptions = function(){
+		options = {
 			'chunkSize': 1024 * 1024 * 1,
 			'concurrentRequests': 1,
-			'repeat': true
+			'repeat': true,
+			'repeatCount': 5
 		}
 	}
 
-	config(options) {
-		for (let [key, value] of Object.entries(options)) {
-			this.options[key] = value;
-		}
-		
-		if(!this.options.url) {
-			throw new Error("Enter Url");
-		}
-		this.numberOfSenders = this.options.concurrentRequests;
-		this.prepareSenders();
-	}
-
-
-	prepareSenders(){
-		for (let i = 0; i < this.numberOfSenders; i++){
-			let sender = new Sender(i+1, this);
-			this.senders.push(sender);
+	var prepareSenders = function(){
+		for (let i = 0; i < numberOfSenders; i++){
+			var sender = new Sender(i+1, CSUpload);
+			senders.push(sender);
 		}
 	}
 
-	upload(file, replaceUrl){
-		if(replaceUrl){
-			let newOptions = JSON.parse(JSON.stringify(this.options));
-			newOptions.url = replaceUrl;
-			let singleFile = new SingleFile(file, newOptions, this);
-			this.singleFiles.push(singleFile);
-			return singleFile;
-		} else {
-			let singleFile = new SingleFile(file, this.options, this);
-			this.singleFiles.push(singleFile);
-			return singleFile;
-		}
+	var swapFiles = function(position){
+		let tempFile = singleFiles[0];
+		singleFiles[0] = singleFiles[position];
+		singleFiles[position] = tempFile;
+		let removed = singleFiles.shift();
+		singleFiles.push(removed);
 	}
 
-	startSenders(){
-		this.senders.forEach((sender) => {
-			if(!sender.isStarted){
-				this.singleFiles.every((file, position) =>{
-					if(!file.isPaused && file.chunksUploaded){
-						const chunk = file.getNextChunk();
-						if(chunk){
-							sender.send(chunk, file);
-							sender.isStarted = true;
-							this.swapFiles(position);
-							return false;
+
+	var singleFiles = [];
+	var senders = [];
+	createDefaultOptions();	
+
+  return { 
+
+		getSenders: function(){
+			return senders;
+		},
+
+		getOptions: function(){
+			return options;
+		},
+
+		startSenders: function(){
+			senders.forEach((sender) => {
+				if(!sender.isStarted){
+					singleFiles.every((file, position) =>{
+						if(!file.isPaused && file.chunksUploaded){
+							const chunk = file.getNextChunk();
+							if(chunk){
+								sender.send(chunk, file);
+								sender.isStarted = true;
+								swapFiles(position);
+								return false;
+							} 
+							return true;
 						} 
 						return true;
-					} 
-					return true;
-				})
+					})
+				}
+			})
+		},
+		
+		config: function(userOptions) {
+			
+			for (let [key, value] of Object.entries(userOptions)) {
+				options[key] = value;
 			}
-		})
-	}
+			
+			if(!options.url) {
+				throw new Error("Enter Url");
+			}
+			numberOfSenders = options.concurrentRequests;
+			prepareSenders();
+		},
 
-	swapFiles(position){
-		let tempFile = this.singleFiles[0];
-		this.singleFiles[0] = this.singleFiles[position];
-		this.singleFiles[position] = tempFile;
-		let removed = this.singleFiles.shift();
-		this.singleFiles.push(removed);
-	}
-}
+		upload: function(file, replaceUrl){
+			if(replaceUrl){
+				let newOptions = JSON.parse(JSON.stringify(options));
+				newOptions.url = replaceUrl;
+				let singleFile = new SingleFile(file, newOptions, this);
+				singleFiles.push(singleFile);
+				return singleFile;
+			} else {
+				let singleFile = new SingleFile(file, options, this);
+				singleFiles.push(singleFile);
+				return singleFile;
+			}
+		}
+  };
+})();

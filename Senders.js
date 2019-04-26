@@ -4,7 +4,7 @@ class Sender{
     this.isStarted = false;
     this.csupload = csupload;
     this.isAborted = false;
-    this.repeatCounter = 5;
+    this.repeatCount = this.csupload.getOptions().repeatCount;
   }
 
   async send(chunk, singleFile){
@@ -47,7 +47,7 @@ class Sender{
       .then((response) => {
         console.log("sent chunk", chunk.chunkNumber, "from sender", this.id, chunk.fileName);
 
-        this.repeatCounter = 5;
+        this.repeatCount = this.csupload.getOptions().repeatCount;
 
         singleFile.chunksSent++;
         const percentage = (singleFile.chunksSent / chunk.numberOfChunks * 100);
@@ -67,9 +67,13 @@ class Sender{
           singleFile.chunksList.push(chunk);
           this.isAborted = false;
         } else {
-          if(this.csupload.options.repeat){
-            this.repeatCounter--;
-            if( this.repeatCounter >= 0){
+
+          if(this.csupload.getOptions().repeat){
+
+            this.repeatCount--;
+            console.log("counter", this.repeatCount);
+
+            if( this.repeatCount >= 0){
               setTimeout(()=>{
                 console.log("Trying to send again chunk number", chunk.chunkNumber, "from sender", this.id);
                 this.send(chunk, singleFile);

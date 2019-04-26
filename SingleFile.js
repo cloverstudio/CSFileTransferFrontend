@@ -1,6 +1,8 @@
 class SingleFile{
+  
   constructor(file, options, CSUpload){
     this.file = file;
+    this.options = options;
     this.chunkSize = options.chunkSize;
     this.url = options.url;
     this.NumberOfChunks = Math.ceil(this.file.size / this.chunkSize);
@@ -10,7 +12,7 @@ class SingleFile{
     this.getSentChunks();
     this.CSUpload = CSUpload;
     this.isPaused = false;
-    this.repeatCounter = 5;
+    this.repeatCount = options.repeatCount;
     this.isFinished = false;
   }
 
@@ -58,7 +60,7 @@ class SingleFile{
   }
 
   async getSentChunks(){
-    console.log(this.chunkSize);
+    
     await fetch(`${this.url}?fileName=${this.file.name}&numberOfChunks=${this.NumberOfChunks}&size=${this.chunkSize}`, {method:"GET"})
         .then((response) => response.json())
         .then((response) =>  {
@@ -68,9 +70,9 @@ class SingleFile{
           console.log(response);
         })
         .catch( (e) => {
-          if(this.CSUpload.options.repeat){
-            this.repeatCounter--;
-            if( this.repeatCounter >= 0){
+          if(this.options.repeat){
+            this.repeatCount--;
+            if( this.repeatCount >= 0){
               setTimeout(()=>{
                 console.log("Trying to connect to server");
                 this.getSentChunks();
@@ -87,7 +89,7 @@ class SingleFile{
   pause(){
     this.isPaused = true;
     
-    this.CSUpload.senders.forEach(sender => {
+    this.CSUpload.getSenders().forEach(sender => {
       if(sender.singleFile.isPaused){
         sender.controller.abort();
         sender.isStarted = false;

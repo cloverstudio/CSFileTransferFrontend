@@ -1,19 +1,17 @@
 const handleFiles = function (files) {
 
-  let cSUpload = new CSUpload();
   
-  cSUpload.config({
+  CSUpload.config({
     'chunkSize': 1024 * 1024 * 1,
     'concurrentRequests': 3,
     'url': 'http://localhost:3000/upload',
-    'repeat': true
+    'repeat': true,
+    'repeatCount': 5
   });
 
-  
-    
   for (let i = 0; i < files.length; i++){
     
-    let singleFile = cSUpload.upload(files[i], "http://192.168.1.16:3000/upload");
+    let singleFile = CSUpload.upload(files[i]);
     
     let paragraph = getNewELement("p");
     paragraph.innerText = singleFile.file.name;
@@ -41,7 +39,7 @@ const handleFiles = function (files) {
     singleFile.eventEmitter.on('error', (message)=>{
       console.log("error happend",message)
     })
-  }  
+  }
 };
 
 const inputElement = document.getElementById('files');
