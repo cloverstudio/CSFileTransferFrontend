@@ -1,6 +1,9 @@
-class SingleFile{
+import "babel-polyfill";
+import EventEmitter from './eventEmitter'
+import {CSUpload} from './CSUpload'
+export default class SingleFile{
   
-  constructor(file, options, CSUpload){
+  constructor(file, options){
     this.file = file;
     this.options = options;
     this.chunkSize = options.chunkSize;
@@ -10,7 +13,6 @@ class SingleFile{
     this.createChunkList();
     this.chunksSent = 0;
     this.getSentChunks();
-    this.CSUpload = CSUpload;
     this.isPaused = false;
     this.repeatCount = options.repeatCount;
     this.isFinished = false;
@@ -66,7 +68,7 @@ class SingleFile{
         .then((response) =>  {
           this.chunksUploaded = response;
           this.chunksSent = this.chunksUploaded.length;
-          this.CSUpload.startSenders();
+          CSUpload.startSenders();
           console.log(response);
         })
         .catch( (e) => {
@@ -89,14 +91,14 @@ class SingleFile{
   pause(){
     this.isPaused = true;
     
-    this.CSUpload.getSenders().forEach(sender => {
+    CSUpload.getSenders().forEach(sender => {
       if(sender.singleFile.isPaused){
         sender.controller.abort();
         sender.isStarted = false;
         sender.isAborted = true;
       }
     });
-    this.CSUpload.startSenders();
+    CSUpload.startSenders();
     
   }
 

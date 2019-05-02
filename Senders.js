@@ -1,10 +1,12 @@
-class Sender{
-  constructor(id, csupload){
+import "babel-polyfill";
+import {CSUpload} from './CSUpload'
+
+export default class Sender{
+  constructor(id){
     this.id = id;
     this.isStarted = false;
-    this.csupload = csupload;
     this.isAborted = false;
-    this.repeatCount = this.csupload.getOptions().repeatCount;
+    this.repeatCount = CSUpload.getOptions().repeatCount;
   }
 
   async send(chunk, singleFile){
@@ -47,7 +49,7 @@ class Sender{
       .then((response) => {
         console.log("sent chunk", chunk.chunkNumber, "from sender", this.id, chunk.fileName);
 
-        this.repeatCount = this.csupload.getOptions().repeatCount;
+        this.repeatCount =CSUpload.getOptions().repeatCount;
 
         singleFile.chunksSent++;
         const percentage = (singleFile.chunksSent / chunk.numberOfChunks * 100);
@@ -58,7 +60,7 @@ class Sender{
         }
 
         this.isStarted = false;
-        this.csupload.startSenders();
+        CSUpload.startSenders();
 
       })
       .catch((e) => {
@@ -68,10 +70,9 @@ class Sender{
           this.isAborted = false;
         } else {
 
-          if(this.csupload.getOptions().repeat){
+          if(CSUpload.getOptions().repeat){
 
             this.repeatCount--;
-            console.log("counter", this.repeatCount);
 
             if( this.repeatCount >= 0){
               setTimeout(()=>{

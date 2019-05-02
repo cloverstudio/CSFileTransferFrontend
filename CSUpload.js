@@ -1,3 +1,7 @@
+import "babel-polyfill";
+import SingleFile from './SingleFile'
+import Sender from './Senders'
+
 var CSUpload = (function() {
 
 	var createDefaultOptions = function(){
@@ -9,7 +13,7 @@ var CSUpload = (function() {
 		}
 	}
 
-	var prepareSenders = function(){
+	var prepareSenders = function(numberOfSenders){
 		for (let i = 0; i < numberOfSenders; i++){
 			var sender = new Sender(i+1, CSUpload);
 			senders.push(sender);
@@ -24,7 +28,7 @@ var CSUpload = (function() {
 		singleFiles.push(removed);
 	}
 
-
+	var options = {};
 	var singleFiles = [];
 	var senders = [];
 	createDefaultOptions();	
@@ -68,8 +72,8 @@ var CSUpload = (function() {
 			if(!options.url) {
 				throw new Error("Enter Url");
 			}
-			numberOfSenders = options.concurrentRequests;
-			prepareSenders();
+			const numberOfSenders = options.concurrentRequests;
+			prepareSenders(numberOfSenders);
 		},
 
 		upload: function(file, replaceUrl){
@@ -87,3 +91,5 @@ var CSUpload = (function() {
 		}
   };
 })();
+
+export {CSUpload};

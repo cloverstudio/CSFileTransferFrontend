@@ -1,3 +1,6 @@
+import "babel-polyfill";
+import {CSUpload} from './CSUpload'
+
 const handleFiles = function (files) {
 
   
@@ -53,7 +56,7 @@ inputElement.addEventListener(
 );
 
 const getNewELement = (type) => {
-  element = document.createElement(type);
+  let element = document.createElement(type);
   document.body.appendChild(element);
   return element;
 }
