@@ -1,42 +1,51 @@
 # cs-file-transfer-upload frontend
 
-<pre>
-DESCRIPTION
-Module allows uploading multiple files in chunks.<br />
+##Description:
+Module allows uploading multiple files in chunks.
 
-HOW TO USE:
+##How to use:
 
-INSTALL:
-npm i cs-file-transfer-upload<br />
+##Install:
 
-IMPORT CSUpload VARIABLE IN YOUR MAIN FILE:
-import {CSUpload} from './node_modules/cs-file-transfer-upload/CSUpload'<br />
+`npm i cs-file-transfer-upload`
 
-CONFIGURE CSUpload VARIABLE:
-CSUpload.config({<br />
-	'chunkSize': 1024 * 1024 * 1,	//size of a chunk in bytes, default is 1024 * 1024 * 1<br />
-	'concurrentRequests': 3,	//number of chunks sent at the same time (max value depends on browser), default is 1<br />
-	'url': 'http://localhost:3000/',	//server<br />
-	'repeat': true,	//if error happens try again, default is true<br />
-    	'repeatCount': 5	//if error happens try 5 more times<br />
-})<br />
+##Import CSUpload variable to your main file:
+`import {CSUpload} from './node_modules/cs-file-transfer-upload/CSUpload'`<br />
 
-UPLOAD FILE:
-singleFile = CSUpload.upload(file)	//upload function returns singleFile object, a file currently uploading, you can also add another argument, url that overrides the previously set url<br />
+##Configure CSUpload variable:
+```Javascript
+CSUpload.config({
+	'chunkSize': 1024 * 1024 * 1,	//size of a chunk in bytes, default is 1024 * 1024 * 1
+	'concurrentRequests': 3,	//number of chunks sent at the same time (max value depends on browser), default is 1
+	'url': 'http://localhost:3000/',	//server
+	'repeat': true,	//if error happens try again, default is true
+    	'repeatCount': 5	//if error happens try 5 more times
+})
+```
+##Upload file:
+```Javascript
+singleFile = CSUpload.upload(file)	//upload function returns singleFile object, a file currently uploading, you can also add another argument, url that overrides the previously set url
+```
 
-singleFile FUNCTIONS:
-singleFile.pause()	//pauses upload of a file<br />
-singleFile.continue()	//continues upload of a file<br />
+##singleFile functions:
+```Javascript
+singleFile.pause()	//pauses upload of a file
+singleFile.continue()	//continues upload of a file
+```
 
-PROGRESS LISTENER:
-singleFile.eventEmitter.on('progress', (progress)=>{<br />
-	//do something<br />
-})<br />
+##Progress listener:
+```Javascript
+singleFile.eventEmitter.on('progress', (progress)=>{
+	//do something
+})
+```
 
-ERROR LISTENER:
-singleFile.eventEmitter.on('error', (message)=>{<br />
-	//do something<br />
-})<br />
+##Error listener:
+```Javascript
+singleFile.eventEmitter.on('error', (message)=>{
+	//do something
+})
+```
 
-USE WEBPACK TO BUNDLE YOUR FILES:
-webpack main.js<br />
+##Use webpack to bundle your files:
+`webpack main.js`
