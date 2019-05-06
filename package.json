@@ -1,14 +1,26 @@
 {
-  "name": "last_version",
+  "name": "cs_file_transfer_upload",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "CSUpload.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloverstudio/CSFileTransferFrontend.git"
+  },
+  "keywords": [
+    "npm",
+    "upload",
+    "chunked"
+  ],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloverstudio/CSFileTransferFrontend/issues"
+  },
+  "homepage": "https://github.com/cloverstudio/CSFileTransferFrontend#readme"
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
