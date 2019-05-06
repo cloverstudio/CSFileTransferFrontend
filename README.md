@@ -8,20 +8,8 @@ Module allows uploading multiple files in chunks.<br />
 # Install:
 npm i cs-file-transfer-upload<br />
 
-# Add all dependencies:
-"devDependencies": {<br />
-	"@babel/core": "^7.4.3",<br />
-    	"@babel/preset-env": "^7.4.3",<br />
-    	"babel-loader": "^8.0.5",<br />
-    	"babel-polyfill": "^6.26.0",<br />
-    	"webpack": "^4.30.0",<br />
-    	"webpack-cli": "^3.3.1",<br />
-    	"webpack-dev-server": "^3.3.1"<br />
-}<br />
-
 # Import CSUpload variable in your main file:
 import {CSUpload} from './node_modules/cs-file-transfer-upload/CSUpload'<br />
-
 
 # Configure CSUpload variable:
 CSUpload.config({<br />
