@@ -1,7 +1,7 @@
 # cs-file-transfer-upload frontend
 
-# Description:
-<pre>Module allows uploading multiple files in chunks.<br />
+<pre> Description
+Module allows uploading multiple files in chunks.<br />
 
 # How to use:
 
