@@ -1,18 +1,18 @@
 # cs-file-transfer-upload frontend
 
-##Description:
+## Description:
 Module allows uploading multiple files in chunks.
 
-##How to use:
+## How to use:
 
-##Install:
+## Install:
 
 `npm i cs-file-transfer-upload`
 
-##Import CSUpload variable to your main file:
+## Import CSUpload variable to your main file:
 `import {CSUpload} from './node_modules/cs-file-transfer-upload/CSUpload'`<br />
 
-##Configure CSUpload variable:
+## Configure CSUpload variable:
 ```Javascript
 CSUpload.config({
 	'chunkSize': 1024 * 1024 * 1,	//size of a chunk in bytes, default is 1024 * 1024 * 1
@@ -22,30 +22,30 @@ CSUpload.config({
     	'repeatCount': 5	//if error happens try 5 more times
 })
 ```
-##Upload file:
+## Upload file:
 ```Javascript
 singleFile = CSUpload.upload(file)	//upload function returns singleFile object, a file currently uploading, you can also add another argument, url that overrides the previously set url
 ```
 
-##singleFile functions:
+## singleFile functions:
 ```Javascript
 singleFile.pause()	//pauses upload of a file
 singleFile.continue()	//continues upload of a file
 ```
 
-##Progress listener:
+## Progress listener:
 ```Javascript
 singleFile.eventEmitter.on('progress', (progress)=>{
 	//do something
 })
 ```
 
-##Error listener:
+## Error listener:
 ```Javascript
 singleFile.eventEmitter.on('error', (message)=>{
 	//do something
 })
 ```
 
-##Use webpack to bundle your files:
+## Use webpack to bundle your files:
 `webpack main.js`
