@@ -13,7 +13,9 @@
   "keywords": [
     "npm",
     "upload",
-    "chunked"
+    "chunked",
+    "pause",
+    "frontend"
   ],
   "author": "",
   "license": "ISC",
